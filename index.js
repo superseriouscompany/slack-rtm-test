@@ -1,6 +1,7 @@
 // A slack stub server
 var express         = require('express');
 var WebSocketServer = require('ws').Server;
+var async           = require('async');
 var app             = express();
 var debug           = require('debug')('slack-rtm-test');
 
@@ -45,11 +46,11 @@ module.exports.serve = function(port, cb) {
       }
     }
 
-    module.exports.expectConversation(conversation, cb) {
+    module.exports.expectConversation = function expectConversation(conversation, cb) {
       async.series(conversation.map(function(message) {
         return function(cb) {
           if( !!message.response ) {
-            return module.exports.shouldReceive(message.response, cb);
+            return module.exports.socket.shouldReceive(message.response, cb);
           }
 
           module.exports.socket.send(message);
