@@ -1,0 +1,30 @@
+{
+  "name": "slack-rtm-test",
+  "version": "1.0.0",
+  "description": "Utility that provides a mock server to make testing slack bots easier.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/superseriouscompany/slack-rtm-test.git"
+  },
+  "keywords": [
+    "slack",
+    "bot",
+    "test",
+    "mock",
+    "stub"
+  ],
+  "author": "Super Serious Company",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/superseriouscompany/slack-rtm-test/issues"
+  },
+  "homepage": "https://github.com/superseriouscompany/slack-rtm-test#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "ws": "^1.1.1"
+  }
+}
