@@ -5,30 +5,46 @@ var async           = require('async');
 var app             = express();
 var debug           = require('debug')('slack-rtm-test');
 
-module.exports.serve = function(port, cb) {
+module.exports.serve = function(port, options, cb) {
+  if( !cb && typeof options === 'function' ) { cb = options; }
+  if( !port ) { return cb(new Error('Port must be specified')); }
+
+  var channels = [
+    { name: 'general', id: 'CG0' }
+  ]
+  var users = [
+    { name: 'neil', id: 'n0' },
+    { name: 'thebigdog', id: 's1' }
+  ]
+  if( options.channels ) { channels = options.channels; }
+  if( options.users ) { users = options.users; }
+
+
   app.get('*', function(req, res) {
     res.json({
       ok: true,
-      // TODO: don't hardcode these
-      users: [
-        { name: 'neil', id: 'n0'},
-        { name: 'thebigdog', id: 's1'}
-      ],
-      channels: [
-        { name: 'general', id: 'CG0'}
-      ],
+      users: users,
+      channels: channels,
       url: 'ws://localhost:6970'
     })
   })
 
-  // TODO: don't hardcode this
-  app.listen(port || 6969, cb);
+  app.listen(port, cb);
 
-  var wss = new WebSocketServer({port: 6970});
+  // TODO: don't hardcode this
+  var wss = new WebSocketServer({port: port+1});
+
   wss.on('connection', function(ws) {
     module.exports.socket = {
       send: function(message) {
         if( message.text && !message.type ) { message.type = 'message'; }
+        if( message.channel ) {
+          var matchingChannel = channels.find(function(c) {
+            return c.id == message.channel || c.name == message.channel.replace(/^#/, '')
+          });
+          if( !matchingChannel ) { return console.error("No matching channel found for", message.channel) }
+          message.channel = matchingChannel.id;
+        }
         ws.send(JSON.stringify(message), {mask: true});
       },
       shouldReceive: function(text, cb) {
