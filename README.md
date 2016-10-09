@@ -13,9 +13,13 @@ Provides utilities for testing slack bots.
 
       it('works', function(done) {
         var conversation = [
-          { text: 'ping', channel: 'abc123' } // sends exactly this message over the slack websocket
+          { text: 'ping', channel: 'abc123' }, // sends exactly this message over the slack websocket
 
-          { response: /pong/ } //
+          { response: /pong/ }, // expects this message within 200ms
+
+          { text: 'ping longer', channel: '#general' },
+
+          { response: /pong/, timeout: 2000 }, // expects this message within 2000ms
         ]
 
         slackTest.expectConversation(conversation, done);
