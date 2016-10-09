@@ -55,7 +55,7 @@ module.exports.serve = function(port, options, cb) {
         options = options || {};
         var timeoutInterval = options.timeout || DEFAULT_TIMEOUT;
 
-        var timeoutFn = setTimeout(function() {
+        var timer = setTimeout(function() {
           return cb(new Error(`Did not receive message ${text} within ${timeoutInterval}ms. Run with DEBUG=slack-rtm-test for more info.`));
         }, timeoutInterval);
 
@@ -63,7 +63,7 @@ module.exports.serve = function(port, options, cb) {
 
         function listener(message) {
           if( JSON.parse(message).text.match(text) ) {
-            clearTimeout(timeoutFn);
+            clearTimeout(timer);
             cb();
             ws.removeListener('message', listener);
             debug(message, "Received expected message");
