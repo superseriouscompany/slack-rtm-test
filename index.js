@@ -18,16 +18,19 @@ module.exports.serve = function(port, options, cb) {
     { name: 'neil', id: 'n0' },
     { name: 'thebigdog', id: 's1' }
   ]
+  var self = { id: 'UMARVIN' }
+
   if( options.channels ) { channels = options.channels; }
   if( options.users ) { users = options.users; }
-
+  if( options.self ) { self = options.self; }
 
   app.get('*', function(req, res) {
     res.json({
-      ok: true,
-      users: users,
+      ok:       true,
+      users:    users,
       channels: channels,
-      url: 'ws://localhost:6970'
+      self:     self,
+      url:      'ws://localhost:6970'
     })
   })
 

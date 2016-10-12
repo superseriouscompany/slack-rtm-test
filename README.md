@@ -7,7 +7,12 @@ Provides utilities for testing slack bots.
 
     describe('it', function() {
       before(function() {
-        slackTest.serve(8000);
+        slackTest.serve(8000, {
+          channels: [
+            { name: 'random', id: 'abc123'},
+            { name: 'general', id: 'def456' }
+          ]
+        });
         var slackBaseUrl = 'http://localhost:8000'; // pass this to your slack client
       })
 
