@@ -38,8 +38,19 @@ module.exports.serve = function(port, options, cb) {
 
   // TODO: don't hardcode this
   var wss = new WebSocketServer({port: port+1});
+  var i = 0;
 
   wss.on('connection', function(ws) {
+    ws.on('message', function(m) {
+      var text = JSON.parse(m).text;
+
+      ws.send(JSON.stringify({
+        text: text,
+        ok: true,
+        reply_to: i++
+      }), {mask: true});
+    })
+
     module.exports.socket = {
       send: function(message) {
         if( message.text && !message.type ) { message.type = 'message'; }
