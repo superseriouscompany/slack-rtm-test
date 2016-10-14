@@ -20,7 +20,7 @@ Provides utilities for testing slack bots.
         var conversation = [
           { text: 'ping', channel: 'abc123' }, // sends exactly this message over the slack websocket
 
-          { response: /pong/ }, // expects this message within 200ms
+          { response: /pong/ }, // expects this message within 100ms
 
           { text: 'ping longer', channel: '#general' },
 
